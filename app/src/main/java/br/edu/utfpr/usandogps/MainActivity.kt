@@ -7,12 +7,17 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.UserManager
+import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
 
 class MainActivity : AppCompatActivity(), LocationListener {
 
@@ -33,6 +38,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         tvLatitude = findViewById( R.id.tvLatitude )
         tvLongitude = findViewById( R.id.tvLongitude )
+
+        tvLatitude.text = "-26.0751195"
+        tvLongitude.text = "-53.0613228"
 
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
@@ -56,12 +64,66 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, this)
 
+
+
     }
 
     override fun onLocationChanged(location: Location) {
 
-        tvLatitude.text = location.latitude.toString()
-        tvLongitude.text = location.longitude.toString()
+        tvLatitude.text = "-26.0751195"
+        tvLongitude.text = "-53.0613228"
 
     }
+
+    fun btVerEnderecoOnClick(view: View) {
+
+        Thread {
+
+            val endereco = "https://maps.googleapis.com/maps/api/geocode/xml?latlng=${tvLatitude.text},${tvLongitude.text}&key=AIzaSyDsy454kAkXofX828BEMieAQ7EbtpjohZY"
+
+            val url = URL(endereco)
+            val urlConnection = url.openConnection()
+
+            val inputStream = urlConnection.getInputStream()
+            val entrada = BufferedReader(InputStreamReader(inputStream))
+
+            val saida = StringBuilder()
+
+            var linha = entrada.readLine()
+
+            while (  linha != null ) {
+                saida.append(linha)
+                linha = entrada.readLine()
+            }
+
+            runOnUiThread {
+
+                val local = saida.substring(
+                    saida.indexOf( "<formatted_address>"),
+                    saida.indexOf( "</formatted_address>")
+                )
+
+                Toast.makeText(
+                    this,
+                    local,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                println( local.toString() )
+            }
+
+
+
+
+
+
+
+
+
+
+        }.start()
+
+    }
+
+    fun btVerMapaOnClick(view: View) {}
 }

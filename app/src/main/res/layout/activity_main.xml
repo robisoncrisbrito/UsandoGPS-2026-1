@@ -32,4 +32,18 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:text="0.0" />
 
+    <Button
+        android:id="@+id/btVerEndereco"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="btVerEnderecoOnClick"
+        android:text="Ver Endereço" />
+
+    <Button
+        android:id="@+id/btVerMapa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="btVerMapaOnClick"
+        android:text="Ver Mapa" />
+
 </LinearLayout>
