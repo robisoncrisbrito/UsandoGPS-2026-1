@@ -2,12 +2,14 @@ package br.edu.utfpr.usandogps
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.UserManager
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -99,7 +101,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             runOnUiThread {
 
                 val local = saida.substring(
-                    saida.indexOf( "<formatted_address>"),
+                    saida.indexOf( "<formatted_address>")+19,
                     saida.indexOf( "</formatted_address>")
                 )
 
@@ -112,18 +114,31 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 println( local.toString() )
             }
 
-
-
-
-
-
-
-
-
-
         }.start()
 
     }
 
-    fun btVerMapaOnClick(view: View) {}
+    fun btVerMapaOnClick(view: View) {
+        Thread {
+
+            val endereco = "https://maps.googleapis.com/maps/api/staticmap?center=${tvLatitude.text},${tvLongitude.text}&zoom=18&size=400x400&key=AIzaSyDsy454kAkXofX828BEMieAQ7EbtpjohZY"
+
+            val url = URL(endereco)
+            val urlConnection = url.openConnection()
+
+            val inputStream = urlConnection.getInputStream()
+
+            val imagem = BitmapFactory.decodeStream(inputStream)
+
+            runOnUiThread {
+
+                val tvMapa = findViewById<ImageView>(R.id.ivMapa)
+                tvMapa.setImageBitmap(imagem)
+
+            }
+
+        }.start()
+
+
+    }
 }

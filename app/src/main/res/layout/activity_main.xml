@@ -46,4 +46,9 @@
         android:onClick="btVerMapaOnClick"
         android:text="Ver Mapa" />
 
+    <ImageView
+        android:id="@+id/ivMapa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
